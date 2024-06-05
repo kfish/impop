@@ -4,6 +4,8 @@
 
 namespace ImPop {
 
+// constexpr re-implementation of ImClamp.
+// See https://github.com/ocornut/imgui/pull/7662
 constexpr float Clamp(float v, float lo, float hi) {
     return (v < lo) ? lo : (v > hi) ? hi : v;
 }
