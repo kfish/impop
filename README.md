@@ -16,6 +16,9 @@ or copy whichever files you need into your project.
 
 ### ImPop::DatePicker
 
+The DatePicker from ImPlot, with a simplified interface that maintains the currently
+browsed (not yet selected) date within `ImGui::Storage`.
+
 ```cpp
 #include "impop_datepicker.h"
 
@@ -29,6 +32,69 @@ ImPlotTime max_time = ImPop::LocTimeNow();
 if (ImPop::DatePicker("date", &t, &default_time, &min_time, &max_time)) {
     // `t` has been updated
 }
+```
+### Application config management
+
+Uses ImGui's ini file and storage to for application state. Provides a dropdown menu
+to edit config variables.
+
+#### `myconfig.h`
+```cpp
+#include "impop_config.h"
+
+// Your custom config must be a POD struct containing only a sequence of
+// `ImPop::ConfigItem`.
+//
+// The given string will be used as a config key in the ini file, and also as the
+// text for the menu.
+
+struct Config {
+    ImPop::ConfigItem use_foo_bar{"Use Foo and Bar", true};
+    ImPop::ConfigItem baz_divider{"Baz_Coeff(tm)", 3.14f};
+    ImPop::ConfigItem count_quux{"Number of Quux", 7};
+} config;
+
+```
+Initialize the config manager, and read any stored config values:
+
+#### `main.cpp`
+```cpp
+#include "impop_config.h"
+#include "myconfig.h"
+
+// ...
+
+    //ImGui_Impl*_NewFrame(); // Set the frame dimensions
+    ImGui::NewFrame();        // Create a window for GetID()
+    ImPop::InitializeConfig(config);
+    ImGui::Render();
+
+```
+
+In your application code, read your config values directly from your `struct Config`:
+
+#### `app.cpp`
+```cpp
+#include "config.h"
+
+if (config.use_foo_bar.bool_value) {
+    // Do stuff with foo and bar
+}
+
+int cakes = config.count_quux.int_value * 3; // 3 cakes each
+
+```
+To display a menu for setting the config values:
+
+#### `app_gui.cpp`
+```cpp
+#include "impop_config.h"
+
+if (ImGui::BeginMenu("My Application")) {
+    ImPop::ConfigMenu();
+    ImGui::EndMenu();
+}
+
 ```
 
 ### Color conversion and palette generation
