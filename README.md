@@ -4,12 +4,17 @@ This repository contains useful utilities for
 [Dear ImGui](https://github.com/ocornut/imgui) and
 [ImPlot](https://github.com/epezent/implot).
 
+`ImPop` should work in the same environments as `ImGui`. Care has been taken to use only
+basic C++11 facilities like `constexpr`, avoiding <strike>`std`</strike>.
+Please report any build issues or incompatibilities.
+
 ## Usage
 
-`ImPop` consists of various (mostly-)independent header files. Use it as a git submodule
-or copy whichever files you need into your project.
+`ImPop` consists of various (mostly-)independent header files. You can use just the
+files you need. Use it as a git submodule or copy individual files into your project.
 
   - `ImPop::DatePicker`
+  - Lightweight config management
   - Color conversion and palette generation
   - `ImPop::OutlineText`
   - `ImPop::PerfFooter`: displays performance metrics
@@ -33,12 +38,12 @@ if (ImPop::DatePicker("date", &t, &default_time, &min_time, &max_time)) {
     // `t` has been updated
 }
 ```
-### Application config management
+### Lightweight config management
 
-Uses ImGui's ini file and storage to for application state. Provides a dropdown menu
+Uses ImGui's ini file for application state. Provides a dropdown menu
 to edit config variables.
 
-#### `myconfig.h`
+#### `app_config.h`
 ```cpp
 #include "impop_config.h"
 
@@ -50,7 +55,7 @@ to edit config variables.
 
 struct Config {
     ImPop::ConfigItem use_foo_bar{"Use Foo and Bar", true};
-    ImPop::ConfigItem baz_divider{"Baz_Coeff(tm)", 3.14f};
+    ImPop::ConfigItem baz_coeff{"BazCoefficient (tm)", 3.14f};
     ImPop::ConfigItem count_quux{"Number of Quux", 7};
 } config;
 
@@ -71,17 +76,20 @@ Initialize the config manager, and read any stored config values:
 
 ```
 
-In your application code, read your config values directly from your `struct Config`:
+In your application code, read and write your config values directly from your `struct Config`:
 
 #### `app.cpp`
 ```cpp
-#include "config.h"
+#include "app_config.h"
 
 if (config.use_foo_bar.bool_value) {
     // Do stuff with foo and bar
 }
 
 int cakes = config.count_quux.int_value * 3; // 3 cakes each
+
+// Update the current estimate
+config.baz_coeff.float_value = 3.1417;
 
 ```
 To display a menu for setting the config values:
@@ -145,9 +153,10 @@ ImPop::OutlineText(draw_list, ImVec2(pos.x, pos.y), "Welcome %s", name);
 ### ImPop::PerfFooter
 
 This provides a handy footer displaying performance metrics:
-    - Memory Usage: Arena, Free Space, Allocated Space
-    - Memory Fragmentation
-    - Current Framerate (FPS)
+
+  * Memory Usage: Arena, Free Space, Allocated Space
+  * Memory Fragmentation
+  * Current Framerate (FPS)
 
 ```cpp
 #include "impop_footer.h"
@@ -156,14 +165,6 @@ This provides a handy footer displaying performance metrics:
 
 ImPop::PerfFooter();
 ```
-
-### Dependencies
-
-`ImPop` should work in the same environments as `ImGui`. Please report any build issues or
-incompatibilities.
-
-`ImPop::DatePicker` requires ImPlot; it is a wrapper around `ImPlot::ShowDatePicker`,
-maintaining the currently browsed (not yet selected) date within `ImGui::Storage`.
 
 License
 -------
