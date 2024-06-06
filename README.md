@@ -44,14 +44,16 @@ Uses ImGui's ini file for application state. Provides a dropdown menu
 to edit config variables.
 
 #### `app_config.h`
+
+Your custom config must be a POD struct containing only a sequence of
+`ImPop::ConfigItem`.
+
+The given string will be used as a config key in the ini file, and also as the
+text for the menu.
+
 ```cpp
 #include "impop_config.h"
 
-// Your custom config must be a POD struct containing only a sequence of
-// `ImPop::ConfigItem`.
-//
-// The given string will be used as a config key in the ini file, and also as the
-// text for the menu.
 
 struct Config {
     ImPop::ConfigItem use_foo_bar{"Use Foo and Bar", true};
@@ -60,9 +62,15 @@ struct Config {
 } config;
 
 ```
-Initialize the config manager, and read any stored config values:
 
 #### `main.cpp`
+
+Initialize the config manager, and read any stored config values. Note that you
+must call `ImPop::InitializeConfig(config)` during a Frame, as it needs
+to access storage via the current window in the ImGui::Context. As you usually
+only want to load the ini file once on application startup, setup a frame before
+entering your main application loop.
+
 ```cpp
 #include "impop_config.h"
 #include "myconfig.h"
@@ -76,9 +84,10 @@ Initialize the config manager, and read any stored config values:
 
 ```
 
+#### `app.cpp`
+
 In your application code, read and write your config values directly from your `struct Config`:
 
-#### `app.cpp`
 ```cpp
 #include "app_config.h"
 
@@ -92,9 +101,11 @@ int cakes = config.count_quux.int_value * 3; // 3 cakes each
 config.baz_coeff.float_value = 3.1417;
 
 ```
-To display a menu for setting the config values:
 
 #### `app_gui.cpp`
+
+Display a menu for setting the config values:
+
 ```cpp
 #include "impop_config.h"
 
