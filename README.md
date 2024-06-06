@@ -19,6 +19,8 @@ files you need. Use it as a git submodule or copy individual files into your pro
   - `ImPop::OutlineText`
   - `ImPop::PerfFooter`: displays performance metrics
 
+<hr/>
+
 ### ImPop::DatePicker
 
 The DatePicker from ImPlot, with a simplified interface that maintains the currently
@@ -38,6 +40,9 @@ if (ImPop::DatePicker("date", &t, &default_time, &min_time, &max_time)) {
     // `t` has been updated
 }
 ```
+
+<hr/>
+
 ### Lightweight config management
 
 Uses ImGui's ini file for application state. Provides a dropdown menu
@@ -53,7 +58,6 @@ text for the menu.
 
 ```cpp
 #include "impop_config.h"
-
 
 struct Config {
     ImPop::ConfigItem use_foo_bar{"Use Foo and Bar", true};
@@ -116,6 +120,8 @@ if (ImGui::BeginMenu("My Application")) {
 
 ```
 
+<hr/>
+
 ### Color conversion and palette generation
 
 These are declared constexpr, so they can be used in constructor initializers, or
@@ -147,6 +153,8 @@ static constexpr std::array<ImU32, palette_size> traffic_lights =
         ImPop::GeneratePalette<palette_size>(color_0, color_1, color_2);
 ```
 
+<hr/>
+
 ### ImPop::OutlineText
 
 White text with a black outline.
@@ -160,6 +168,8 @@ White text with a black outline.
 ImPop::OutlineText(draw_list, ImVec2(pos.x, pos.y), "Welcome %s", name);
 
 ```
+
+<hr/>
 
 ### ImPop::PerfFooter
 
@@ -176,6 +186,8 @@ This provides a handy footer displaying performance metrics:
 
 ImPop::PerfFooter();
 ```
+
+<hr/>
 
 License
 -------
