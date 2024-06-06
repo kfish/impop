@@ -5,7 +5,8 @@ This repository contains useful utilities for
 [ImPlot](https://github.com/epezent/implot).
 
 `ImPop` should work in the same environments as `ImGui`. Care has been taken to use only
-basic C++11 facilities like `constexpr`, avoiding <strike>`std`</strike>.
+basic C++11 facilities like `constexpr`. It avoids the use of the C++ standard library,
+except for the standalone header `impop_ostream.h`.
 Please report any build issues or incompatibilities.
 
 ## Usage
