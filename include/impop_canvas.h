@@ -2,6 +2,8 @@
 
 #include "imgui.h"
 
+#include "impop_text.h"
+
 namespace ImPop {
 
 struct Canvas {
@@ -46,6 +48,13 @@ struct Canvas {
         draw_list->PushClipRect(cmin, cmax, true);
         draw_list->AddText(cmin+text_offset, text_color, text_str);
         draw_list->PopClipRect();
+    }
+
+    void OutlineText(const ImVec2& pos, const char* fmt, ...) {
+        va_list args;
+        va_start(args, fmt);
+        ImPop::OutlineTextV(draw_list, top_left + pos, fmt, args);
+        va_end(args);
     }
 };
 
