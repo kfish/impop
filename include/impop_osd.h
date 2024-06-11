@@ -24,6 +24,16 @@ inline int osd_forward_reverse_speed = 1;
 
 inline float osd_start = 0;
 inline float osd_timeout = 0.5;
+inline float (*osd_ease_func)(float) = QuadEaseInOut;
+
+static inline void OSDSetTimeout(float timeout) {
+    osd_timeout = timeout;
+}
+
+// Set to a different function from impop_ease.h
+static inline void OSDSetEaseFunc(float (*ease_func)(float)) {
+    osd_ease_func = ease_func;
+}
 
 static inline void OSDClear() {
     osd_start = 0;
@@ -98,7 +108,7 @@ static inline void OSDShow() {
 
     float t = 1.0 - (timer / osd_timeout);
 
-    ImU32 alpha = 128 * ImPop::QuadEaseInOut(t);
+    ImU32 alpha = 128 * osd_ease_func(t);
     ImU32 color = IM_COL32(255, 255, 255, alpha);
     ImU32 outline_color = IM_COL32(0, 0, 0, alpha);
 
