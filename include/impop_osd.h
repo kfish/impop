@@ -2,6 +2,8 @@
 
 #include "imgui.h"
 
+#include "impop_ease.h"
+
 namespace ImPop {
 
 enum class OSDType {
@@ -21,7 +23,7 @@ inline float osd_font_size;
 inline int osd_forward_reverse_speed = 1;
 
 inline float osd_start = 0;
-inline float osd_timeout = 0.3;
+inline float osd_timeout = 0.5;
 
 static inline void OSDClear() {
     osd_start = 0;
@@ -96,7 +98,7 @@ static inline void OSDShow() {
 
     float t = 1.0 - (timer / osd_timeout);
 
-    ImU32 alpha = 128 * t;
+    ImU32 alpha = 128 * ImPop::QuadEaseInOut(t);
     ImU32 color = IM_COL32(255, 255, 255, alpha);
     ImU32 outline_color = IM_COL32(0, 0, 0, alpha);
 
