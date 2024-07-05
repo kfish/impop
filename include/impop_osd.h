@@ -3,6 +3,7 @@
 #include "imgui.h"
 
 #include "impop_ease.h"
+#include "impop_transport.h"
 
 namespace ImPop {
 
@@ -151,7 +152,6 @@ static inline void OSDShow() {
     const float side = std::min(center.x, center.y);
     const ImVec2 square = ImVec2(side, side);
     const ImVec2 square_min = ImVec2(center.x - side*0.5f, center.y - side*0.5f);
-    const ImVec2 square_max = ImVec2(center.x + side*0.5f, center.y + side*0.5f);
 
     // Access the foreground draw list (drawn after all windows)
     ImDrawList* draw_list = ImGui::GetForegroundDrawList();
@@ -163,53 +163,22 @@ static inline void OSDShow() {
             draw_list->AddText(nullptr, osd_font_size, osd_text_pos, color, osd_text_buffer);
             break;
         case OSDType::Play:
-            {
-                ImVec2 p2 = ImVec2(square_max.x, center.y);
-                ImVec2 p3 = ImVec2(square_min.x, square_max.y);
-                draw_list->AddTriangleFilled(square_min, p2, p3, color);
-            }
+            PlayIcon(draw_list, square_min, square, color);
             break;
         case OSDType::Pause:
-            {
-                ImVec2 p = ImVec2(square_min.x + side/3.0, square_max.y);
-                draw_list->AddRectFilled(square_min, p, color);
-            }
-            {
-                ImVec2 p = ImVec2(square_max.x - side/3.0, square_min.y);
-                draw_list->AddRectFilled(p, square_max, color);
-            }
+            PauseIcon(draw_list, square_min, square, color);
             break;
         case OSDType::Stop:
-            {
-                draw_list->AddRectFilled(square_min, square_max, color);
-            }
+            StopIcon(draw_list, square_min, square, color);
             break;
         case OSDType::Forward:
-            {
-                ImVec2 p3 = ImVec2(square_min.x, square_max.y);
-                draw_list->AddTriangleFilled(square_min, center, p3, color);
-            }
-            {
-                ImVec2 p1 = ImVec2(center.x, square_min.y);
-                ImVec2 p2 = ImVec2(square_max.x, center.y);
-                ImVec2 p3 = ImVec2(center.x, square_max.y);
-                draw_list->AddTriangleFilled(p1, p2, p3, color);
-            }
+            ForwardIcon(draw_list, square_min, square, color);
             if (osd_forward_reverse_speed > 1) {
                 draw_list->AddText(nullptr, osd_font_size, osd_text_pos, color, osd_text_buffer);
             }
             break;
         case OSDType::Reverse:
-            {
-                ImVec2 p1 = ImVec2(center.x, square_min.y);
-                ImVec2 p2 = ImVec2(square_min.x, center.y);
-                ImVec2 p3 = ImVec2(center.x, square_max.y);
-                draw_list->AddTriangleFilled(p1, p2, p3, color);
-            }
-            {
-                ImVec2 p1 = ImVec2(square_max.x, square_min.y);
-                draw_list->AddTriangleFilled(p1, center, square_max, color);
-            }
+            ReverseIcon(draw_list, square_min, square, color);
             if (osd_forward_reverse_speed > 1) {
                 draw_list->AddText(nullptr, osd_font_size, osd_text_pos, color, osd_text_buffer);
             }
